@@ -1,0 +1,15 @@
+D:\MMCS\AI\Reversi\ReversiUI\bin\Debug\ReversiUI.exe.config
+D:\MMCS\AI\Reversi\ReversiUI\bin\Debug\ReversiUI.exe
+D:\MMCS\AI\Reversi\ReversiUI\bin\Debug\ReversiUI.pdb
+D:\MMCS\AI\Reversi\ReversiUI\bin\Debug\Reversi.exe
+D:\MMCS\AI\Reversi\ReversiUI\bin\Debug\Reversi.pdb
+D:\MMCS\AI\Reversi\ReversiUI\bin\Debug\Reversi.exe.config
+D:\MMCS\AI\Reversi\ReversiUI\obj\Debug\ReversiUI.csproj.AssemblyReference.cache
+D:\MMCS\AI\Reversi\ReversiUI\obj\Debug\ReversiUI.MainMenuForm.resources
+D:\MMCS\AI\Reversi\ReversiUI\obj\Debug\ReversiUI.GameForm.resources
+D:\MMCS\AI\Reversi\ReversiUI\obj\Debug\ReversiUI.Properties.Resources.resources
+D:\MMCS\AI\Reversi\ReversiUI\obj\Debug\ReversiUI.csproj.GenerateResource.cache
+D:\MMCS\AI\Reversi\ReversiUI\obj\Debug\ReversiUI.csproj.CoreCompileInputs.cache
+D:\MMCS\AI\Reversi\ReversiUI\obj\Debug\ReversiUI.csproj.CopyComplete
+D:\MMCS\AI\Reversi\ReversiUI\obj\Debug\ReversiUI.exe
+D:\MMCS\AI\Reversi\ReversiUI\obj\Debug\ReversiUI.pdb

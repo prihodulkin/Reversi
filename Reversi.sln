@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi", "Reversi\Reversi.csproj", "{B33AFFED-624B-4AF7-85A4-F759D658E8C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReversiUI", "ReversiUI\ReversiUI.csproj", "{EC33E4DA-115E-46F5-8542-671E779ADFE1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B33AFFED-624B-4AF7-85A4-F759D658E8C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B33AFFED-624B-4AF7-85A4-F759D658E8C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B33AFFED-624B-4AF7-85A4-F759D658E8C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B33AFFED-624B-4AF7-85A4-F759D658E8C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC33E4DA-115E-46F5-8542-671E779ADFE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC33E4DA-115E-46F5-8542-671E779ADFE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC33E4DA-115E-46F5-8542-671E779ADFE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC33E4DA-115E-46F5-8542-671E779ADFE1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2382C30D-9E7E-4DAA-9D9D-75CCCC2955B3}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,7 @@
+D:\MMCS\AI\Reversi\Reversi\bin\Debug\Reversi.exe.config
+D:\MMCS\AI\Reversi\Reversi\bin\Debug\Reversi.exe
+D:\MMCS\AI\Reversi\Reversi\bin\Debug\Reversi.pdb
+D:\MMCS\AI\Reversi\Reversi\obj\Debug\Reversi.csproj.AssemblyReference.cache
+D:\MMCS\AI\Reversi\Reversi\obj\Debug\Reversi.csproj.CoreCompileInputs.cache
+D:\MMCS\AI\Reversi\Reversi\obj\Debug\Reversi.exe
+D:\MMCS\AI\Reversi\Reversi\obj\Debug\Reversi.pdb
