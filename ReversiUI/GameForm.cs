@@ -105,11 +105,12 @@ namespace ReversiUI
             }
             else if(whiteCount==blackCount)
             {
-                text = "Победили чёрные";
+                text = "Победила дружба";
+               
             }
             else
             {
-                text = "Победила дружба";
+                text = "Победили чёрные";
             }
             var r =MessageBox.Show(text);
             endOfGame = true;
@@ -149,6 +150,11 @@ namespace ReversiUI
                 {
                     gamePositions.Push(currentPosition.MakeStep(s));
                     currentPosition = gamePositions.Peek();
+                }
+                if (currentPosition.IsTerminal())
+                {
+                    showResults();
+                    return;
                 }
                 Refresh();
             } catch(ArgumentException) 
