@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Reversi
 {
-    class Bot
+    public class Bot
     {
         /// <summary>
         /// Уровень - глубина алгоритма
@@ -36,6 +36,7 @@ namespace Reversi
             Player = player;
             Opponent = player.Opponent();
             Level = level;
+            steps = new List<Square>();
         }
 
         void checkStepCorrectness(Player player)
@@ -69,6 +70,7 @@ namespace Reversi
             while (position.Player == Player)
             {
                 Minimax.MinimaxProcedure(node, Player, Level);
+
                 var descDict = node.DescendantsDict;
                 var maxP = descDict.First();
                 foreach(var p in descDict)

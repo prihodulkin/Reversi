@@ -21,5 +21,15 @@ namespace ReversiUI
         {
             new GameForm(GameMode.TwoPlayers).Show();
         }
+
+        private void settingsButton_Click(object sender, EventArgs e)
+        {
+            new SettingsForm().Show();
+        }
+
+        private void vsBotButton_Click(object sender, EventArgs e)
+        {
+            new GameForm(GameMode.PlayerVsBot).Show();
+        }
     }
 }

@@ -13,3 +13,4 @@ D:\MMCS\AI\Reversi\ReversiUI\obj\Debug\ReversiUI.csproj.CoreCompileInputs.cache
 D:\MMCS\AI\Reversi\ReversiUI\obj\Debug\ReversiUI.csproj.CopyComplete
 D:\MMCS\AI\Reversi\ReversiUI\obj\Debug\ReversiUI.exe
 D:\MMCS\AI\Reversi\ReversiUI\obj\Debug\ReversiUI.pdb
+D:\MMCS\AI\Reversi\ReversiUI\obj\Debug\ReversiUI.SettingsForm.resources

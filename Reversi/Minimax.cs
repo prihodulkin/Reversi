@@ -78,10 +78,6 @@ namespace Reversi
         {
             var blackCount = position.BlackCount;
             var whiteCount = position.WhiteCount;
-            if (blackCount + whiteCount != 56)
-            {
-                throw new ArgumentException("Position is not terminal!");
-            }
             var score = blackCount > whiteCount ? int.MaxValue : blackCount == whiteCount ? 0 : int.MinValue;
             return maxPlayer == Player.Black ? score : -score; 
             
@@ -132,10 +128,12 @@ namespace Reversi
             if (position.IsTerminal())
             {
                 node.Score = GetTerminalScore(position, maxPlayer);
+                return;
             }
             if (depth == 0)
             {
                 node.Score = Heuristic(position, maxPlayer, node.AbsDepth);
+                return;
             }
             if (position.Player == maxPlayer)
             {
@@ -157,7 +155,7 @@ namespace Reversi
                 {
                     MinimaxProcedure(n, maxPlayer, depth - 1);
                     var s = n.Score;
-                    if (s  score)
+                    if (s  < score)
                     {
                         score = s;
                     }

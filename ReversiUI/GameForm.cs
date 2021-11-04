@@ -19,10 +19,18 @@ namespace ReversiUI
     public partial class GameForm : Form
     {
         GameMode mode;
+        Bot bot;
         Stack<GamePosition> gamePositions;
+        bool endOfGame = false;
+        bool IsBotMode => mode == GameMode.PlayerVsBot;
         public GameForm(GameMode mode)
         {
             this.mode = mode;
+            if (mode == GameMode.PlayerVsBot)
+            {
+                var settings = Settings.GetInstance();
+                bot = new Bot(settings.User.Opponent(), settings.Level);
+            }
             gamePositions = new Stack<GamePosition>();
             gamePositions.Push(new GamePosition());
             InitializeComponent();
@@ -51,6 +59,10 @@ namespace ReversiUI
                 x += wStep;
                 y += hStep;
             }
+            if (endOfGame)
+            {
+                return;
+            }
             var currentPosition = gamePositions.Peek();
             foreach(var piece in currentPosition.BlackPieces)
             {
@@ -69,12 +81,39 @@ namespace ReversiUI
                                   hStep / 5 * 4);
                 g.DrawEllipse(pen, rect);       
             }
-            foreach(var s in currentPosition.PossibleStepsSquares)
+            if ((IsBotMode&&currentPosition.Player != bot.Player)||!IsBotMode)
             {
-                SolidBrush pBrush = new SolidBrush(Color.Aqua);
-                g.FillRectangle(pBrush, s.X*wStep+1, s.Y*hStep+1, wStep-1, hStep-1);
+                foreach (var s in currentPosition.PossibleStepsSquares)
+                {
+                    SolidBrush pBrush = new SolidBrush(Color.Aqua);
+                    g.FillRectangle(pBrush, s.X * wStep + 1, s.Y * hStep + 1, wStep - 1, hStep - 1);
+                }
             }
+          
             movingLabel.Text = currentPosition.Player == Player.Black ? "Ходят чёрные" : "Ходят белые";
+        }
+
+        private void showResults()
+        {
+            var currentPosition = gamePositions.Peek();
+            var whiteCount = currentPosition.WhiteCount;
+            var blackCount = currentPosition.BlackCount;
+            var text = "";
+            if (whiteCount > blackCount)
+            {
+                text = "Победили белые";
+            }
+            else if(whiteCount==blackCount)
+            {
+                text = "Победили чёрные";
+            }
+            else
+            {
+                text = "Победила дружба";
+            }
+            var r =MessageBox.Show(text);
+            endOfGame = true;
+            Refresh();
         }
 
         private void reversiField_MouseClick(object sender, MouseEventArgs e)
@@ -88,6 +127,29 @@ namespace ReversiUI
             try
             {
                 gamePositions.Push(currentPosition.MakeStep(square));
+                currentPosition = gamePositions.Peek();
+                Refresh();
+                if (currentPosition.IsTerminal())
+                {
+                    showResults();
+                    return;
+                }
+                if (!IsBotMode)
+                {
+                    return;
+                }
+                
+                bot.OpponentStep(square);
+                if (currentPosition.Player != bot.Player)
+                {
+                    return;
+                }
+
+                foreach(var s in bot.BotSteps())
+                {
+                    gamePositions.Push(currentPosition.MakeStep(s));
+                    currentPosition = gamePositions.Peek();
+                }
                 Refresh();
             } catch(ArgumentException) 
             {

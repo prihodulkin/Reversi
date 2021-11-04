@@ -269,7 +269,7 @@ namespace Reversi
 
         public bool IsTerminal()
         {
-            return blackPieces.Count + whitePieces.Count == 56;
+            return blackPieces.Count + whitePieces.Count == 64||possibleSteps.Count==0;
         }
 
         public GamePosition MakeStep(Square square)
@@ -282,6 +282,7 @@ namespace Reversi
             var bPieces = new HashSet<Square>(blackPieces);
             var playerPieces = player == Player.Black ? bPieces:wPieces;
             var opponentPieces = player == Player.Black ? wPieces : bPieces;
+            
             var newPlayer = player;
             if (possibleSteps.Count > 0)
             {
