@@ -38,8 +38,8 @@ namespace ReversiUI
             SolidBrush brush = new SolidBrush(Color.Black);
             Pen pen = new Pen(brush);
             Graphics g = e.Graphics;
-            var width = (sender as PictureBox).Width-5;
-            var height = (sender as PictureBox).Height-5;
+            var width = ((sender as PictureBox).Width-5)/8*8;
+            var height = ((sender as PictureBox).Height-5)/8*8;
             var wStep = width / 8;
             var hStep = height / 8;
             var x = 0;
@@ -72,14 +72,15 @@ namespace ReversiUI
             foreach(var s in currentPosition.PossibleStepsSquares)
             {
                 SolidBrush pBrush = new SolidBrush(Color.Aqua);
-                g.FillRectangle(pBrush, s.X*wStep, s.Y*hStep, wStep, hStep);
+                g.FillRectangle(pBrush, s.X*wStep+1, s.Y*hStep+1, wStep-1, hStep-1);
             }
+            movingLabel.Text = currentPosition.Player == Player.Black ? "Ходят чёрные" : "Ходят белые";
         }
 
         private void reversiField_MouseClick(object sender, MouseEventArgs e)
         {
-            var width = (sender as PictureBox).Width-5;
-            var height = (sender as PictureBox).Height-5;
+            var width = ((sender as PictureBox).Width - 5) / 8 * 8;
+            var height = ((sender as PictureBox).Height - 5) / 8 * 8;
             var wStep = width / 8;
             var hStep = height / 8;
             var currentPosition = gamePositions.Peek();
@@ -92,6 +93,11 @@ namespace ReversiUI
             {
                 MessageBox.Show("Выбрана неправильная клетка для хода");
             }
+        }
+
+        private void movingLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

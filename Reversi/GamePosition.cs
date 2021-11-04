@@ -60,6 +60,13 @@ namespace Reversi
             return result;
         }
 
+        public List<Square> GetNeightbours()
+        {
+            var x1 = x;
+            var y1 = y;
+            return GetNeightbourDirections().Select(d => new Square(x1 + d.Item1, y1 + d.Item2)).ToList();
+        }
+
         public Square Next(Tuple<int,int> direction) {
             return new Square(x + direction.Item1, y + direction.Item2);
         }
@@ -84,6 +91,24 @@ namespace Reversi
         White,
     }
 
+    public static class PlayerExtension
+    {
+        public static Player Opponent(this Player player)
+        {
+            return player==Player.Black? Player.White:Player.Black;
+        }
+
+        public static SquareState PlayerState(this Player player)
+        {
+            return player == Player.Black ? SquareState.Black: SquareState.White;
+        }
+
+        public static SquareState OpponentState(this Player player)
+        {
+            return player == Player.Black ? SquareState.White : SquareState.Black;
+        }
+    }
+
 
     public class GamePosition
     {
@@ -105,9 +130,11 @@ namespace Reversi
 
         public Player Player => player;
         public List<Square> PossibleStepsSquares => possibleSteps.Keys.ToList();
-
         public HashSet<Square> WhitePieces => whitePieces;
         public HashSet<Square> BlackPieces => blackPieces;
+        public int WhiteCount => whitePieces.Count;
+        public int BlackCount => blackPieces.Count;
+
 
 
         void initEdgesWithPieces(SquareState state)
@@ -162,9 +189,15 @@ namespace Reversi
         {
             var start = square;
             square = square.Next(direction);
+            var playerState = player.PlayerState();
             while (square.InField)
             {
-                if (field[square.X, square.Y] == SquareState.Empty)
+                var squareState = field[square.X, square.Y];
+                if (squareState == playerState)
+                {
+                    return;
+                }
+                if (squareState == SquareState.Empty)
                 {
                     if (possibleSteps.ContainsKey(square))
                     {
@@ -184,7 +217,7 @@ namespace Reversi
         {
             this.possibleSteps = new Dictionary<Square, Dictionary<Tuple<int, int>, Square>>();
             var pieces = player == Player.Black ? blackPieces : whitePieces;
-            var opponentState = player == Player.Black ? SquareState.White : SquareState.Black;
+            var opponentState = player.OpponentState();
             foreach(var p in pieces)
             {
                 foreach(var dir in p.GetNeightbourDirections())
@@ -234,6 +267,11 @@ namespace Reversi
             findPossibleSteps();
         }
 
+        public bool IsTerminal()
+        {
+            return blackPieces.Count + whitePieces.Count == 56;
+        }
+
         public GamePosition MakeStep(Square square)
         {
             if (!possibleSteps.ContainsKey(square))
@@ -247,7 +285,7 @@ namespace Reversi
             var newPlayer = player;
             if (possibleSteps.Count > 0)
             {
-                newPlayer = player == Player.Black ? Player.White : Player.Black;
+                newPlayer = player.Opponent();
                 var changedSquares = getChangedSquares(square).ToList();
                 foreach (var s in changedSquares)
                 {
@@ -267,6 +305,89 @@ namespace Reversi
                 result.Add(MakeStep(p.Key));
             }
             return result;
+        }
+
+        public List<(Square, GamePosition)> GetAllPossibleStepsWithSquares()
+        {
+            List<(Square, GamePosition)> result = new List<(Square, GamePosition)>(possibleSteps.Count);
+            foreach (var p in possibleSteps)
+            {
+                result.Add((p.Key, MakeStep(p.Key)));
+            }
+            return result;
+        }
+
+        public int GetMobility()
+        {
+            return possibleSteps.Count;
+        }
+
+        public int GetPotintialMobility(Player player)
+        {
+
+            HashSet<Square> emptySquares = new HashSet<Square>();
+            foreach(var s in player == Player.White ? blackPieces : whitePieces)
+            {
+                foreach(var n in s.GetNeightbours())
+                {
+                    emptySquares.Add(n);
+                }
+            }
+            return emptySquares.Count;
+        }
+
+        public int GetCornersCount(Player player)
+        {
+            var playerState = player.PlayerState();
+            int result = 0;
+            foreach(var s in new SquareState[4]{ field[0,0], field[0,7], field[7,0], field[7,7] })
+            {
+                if (s == playerState)
+                {
+                    result++;
+                }
+            }
+            return result;
+        }
+
+        public int GetEdgesSquaresCount(Player player)
+        {
+            var playerState = player.PlayerState();
+            int result = 0;
+            foreach(var s in edges)
+            {
+                if (s == playerState)
+                {
+                    result++;
+                }
+            }
+            return result;
+        }
+
+        public int GetEdgesStability(Player player)
+        {
+            var playerState = player.PlayerState();
+            int result = 0;
+            for(int i = 0; i < 4; i++)
+            {
+                for(int j = 0; j < 8; j++)
+                {
+                    if (field[i, j] != playerState)
+                    {
+                        break;
+                    }
+                    result++;
+                }
+                for (int j = 7; j >=0; j--)
+                {
+                    if (field[i, j] != playerState)
+                    {
+                        break;
+                    }
+                    result++;
+                }
+            }
+            return result - GetCornersCount(player);
         }
     }
 }
