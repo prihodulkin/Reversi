@@ -318,9 +318,9 @@ namespace Reversi
             return result;
         }
 
-        public int GetMobility()
+        public int GetMobility(Player maxPlayer)
         {
-            return possibleSteps.Count;
+            return maxPlayer==Player? possibleSteps.Count:-possibleSteps.Count;
         }
 
         public int GetPotintialMobility(Player player)
@@ -363,6 +363,11 @@ namespace Reversi
                 }
             }
             return result;
+        }
+
+        public int GetDisksCount(Player player)
+        {
+            return player == Player.Black ? BlackCount : WhiteCount;
         }
 
         public int GetEdgesStability(Player player)

@@ -23,7 +23,7 @@ namespace ReversiUI
 
         Settings()
         {
-           level = 3;
+           level = 4;
         }
 
         public Player User;

@@ -66,11 +66,13 @@ namespace Reversi
             var opponent = maxPlayer.Opponent();
             var mCoeff = GetMobilityCoefficient(stepNumber);
             var sCoeff = GetStabilityCoefficient(stepNumber);
-            var result = mCoeff * position.GetMobility()+
-                         mCoeff*(position.GetPotintialMobility(maxPlayer) - position.GetPotintialMobility(opponent)) +
-                         7*(position.GetCornersCount(maxPlayer) - position.GetCornersCount(opponent)) +
-                         2*(position.GetEdgesSquaresCount(maxPlayer) - position.GetEdgesSquaresCount(opponent)) +
-                         sCoeff*(position.GetEdgesStability(maxPlayer) - position.GetEdgesSquaresCount(opponent));
+            var result = (position.GetDisksCount(maxPlayer) - position.GetDisksCount(opponent))+
+                       2* position.GetMobility(maxPlayer)+
+                       2* (position.GetPotintialMobility(maxPlayer) - position.GetPotintialMobility(opponent)) +
+                       // (position.GetCornersCount(maxPlayer) - position.GetCornersCount(opponent)) +
+                       // (position.GetEdgesSquaresCount(maxPlayer) - position.GetEdgesSquaresCount(opponent)) +
+                       // (position.GetEdgesStability(maxPlayer) - position.GetEdgesSquaresCount(opponent))
+                       +0;
             return result;
         }
 
@@ -147,6 +149,7 @@ namespace Reversi
                         score = s;
                     }
                 }
+                node.Score = score;
             }
             else
             {
@@ -160,8 +163,57 @@ namespace Reversi
                         score = s;
                     }
                 }
+                node.Score = score;
             }
         }
 
+
+        public static void MinimaxProcedureWithAlphaBetaPruning(Node node, Player maxPlayer, int depth, int alpha, int beta)
+        {
+            var position = node.Position;
+            if (position.IsTerminal())
+            {
+                node.Score = GetTerminalScore(position, maxPlayer);
+                return;
+            }
+            if (depth == 0)
+            {
+                node.Score = Heuristic(position, maxPlayer, node.AbsDepth);
+                return;
+            }
+
+            if (position.Player == maxPlayer)
+            {
+                alpha = int.MinValue;
+                int score = int.MinValue;
+                foreach (var n in node.Descendants)
+                {
+                    MinimaxProcedureWithAlphaBetaPruning(n, maxPlayer, depth - 1, alpha, beta);
+                    score = Math.Max(score, n.Score);
+                    alpha = Math.Max(alpha, n.Score);
+                    if (alpha <= beta)
+                    {
+                        break;
+                    }
+                }
+                node.Score = score;
+            }
+            else
+            {
+                int score = int.MaxValue;
+                foreach (var n in node.Descendants)
+                {
+                    MinimaxProcedureWithAlphaBetaPruning(n, maxPlayer, depth - 1, alpha, beta);
+                    var s = n.Score;
+                    score = Math.Min(score, n.Score);
+                    beta = Math.Min(score, n.Score);
+                    if (alpha <= beta)
+                    {
+                        break;
+                    }
+                }
+                node.Score = score;
+            }
+        }
     }
 }

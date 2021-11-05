@@ -69,7 +69,7 @@ namespace Reversi
             }
             while (position.Player == Player)
             {
-                Minimax.MinimaxProcedure(node, Player, Level);
+                Minimax.MinimaxProcedureWithAlphaBetaPruning(node, Player, Level, int.MinValue, int.MaxValue);
 
                 var descDict = node.DescendantsDict;
                 var maxP = descDict.First();

@@ -50,7 +50,7 @@ namespace ReversiUI
             0,
             0});
             this.levelUpDown.Name = "levelUpDown";
-            this.levelUpDown.Size = new System.Drawing.Size(40, 26);
+            this.levelUpDown.Size = new System.Drawing.Size(60, 26);
             this.levelUpDown.TabIndex = 0;
             this.levelUpDown.Value = new decimal(new int[] {
             3,

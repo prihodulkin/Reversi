@@ -26,14 +26,25 @@ namespace ReversiUI
         public GameForm(GameMode mode)
         {
             this.mode = mode;
-            if (mode == GameMode.PlayerVsBot)
-            {
-                var settings = Settings.GetInstance();
-                bot = new Bot(settings.User.Opponent(), settings.Level);
-            }
+            InitializeComponent();
             gamePositions = new Stack<GamePosition>();
             gamePositions.Push(new GamePosition());
-            InitializeComponent();
+            if (mode == GameMode.PlayerVsBot)
+            {   
+                var settings = Settings.GetInstance();
+                bot = new Bot(settings.User.Opponent(), settings.Level);
+                if (bot.Player == Player.Black)
+                {
+                    var currentPosition = gamePositions.Peek();
+                    foreach (var s in bot.BotSteps())
+                    {
+                        gamePositions.Push(currentPosition.MakeStep(s));
+                        currentPosition = gamePositions.Peek();
+                    }
+                    Refresh();
+                }
+            }    
+           
         }
 
         private void reversiField_Click(object sender, EventArgs e)
@@ -151,12 +162,12 @@ namespace ReversiUI
                     gamePositions.Push(currentPosition.MakeStep(s));
                     currentPosition = gamePositions.Peek();
                 }
+                Refresh();
                 if (currentPosition.IsTerminal())
                 {
                     showResults();
                     return;
                 }
-                Refresh();
             } catch(ArgumentException) 
             {
                 MessageBox.Show("Выбрана неправильная клетка для хода");

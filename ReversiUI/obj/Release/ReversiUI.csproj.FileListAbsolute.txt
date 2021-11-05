@@ -1,0 +1,16 @@
+D:\MMCS\AI\Reversi\ReversiUI\bin\Release\ReversiUI.exe.config
+D:\MMCS\AI\Reversi\ReversiUI\bin\Release\ReversiUI.exe
+D:\MMCS\AI\Reversi\ReversiUI\bin\Release\ReversiUI.pdb
+D:\MMCS\AI\Reversi\ReversiUI\bin\Release\Reversi.exe
+D:\MMCS\AI\Reversi\ReversiUI\bin\Release\Reversi.pdb
+D:\MMCS\AI\Reversi\ReversiUI\bin\Release\Reversi.exe.config
+D:\MMCS\AI\Reversi\ReversiUI\obj\Release\ReversiUI.csproj.AssemblyReference.cache
+D:\MMCS\AI\Reversi\ReversiUI\obj\Release\ReversiUI.MainMenuForm.resources
+D:\MMCS\AI\Reversi\ReversiUI\obj\Release\ReversiUI.GameForm.resources
+D:\MMCS\AI\Reversi\ReversiUI\obj\Release\ReversiUI.Properties.Resources.resources
+D:\MMCS\AI\Reversi\ReversiUI\obj\Release\ReversiUI.SettingsForm.resources
+D:\MMCS\AI\Reversi\ReversiUI\obj\Release\ReversiUI.csproj.GenerateResource.cache
+D:\MMCS\AI\Reversi\ReversiUI\obj\Release\ReversiUI.csproj.CoreCompileInputs.cache
+D:\MMCS\AI\Reversi\ReversiUI\obj\Release\ReversiUI.csproj.CopyComplete
+D:\MMCS\AI\Reversi\ReversiUI\obj\Release\ReversiUI.exe
+D:\MMCS\AI\Reversi\ReversiUI\obj\Release\ReversiUI.pdb
