@@ -33,6 +33,8 @@ namespace ReversiUI
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.heuristicsComboBox = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.levelUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -89,11 +91,37 @@ namespace ReversiUI
             this.label2.TabIndex = 3;
             this.label2.Text = "Кем играть ";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(210, 173);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(91, 20);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Эвристика";
+            // 
+            // heuristicsComboBox
+            // 
+            this.heuristicsComboBox.FormattingEnabled = true;
+            this.heuristicsComboBox.Items.AddRange(new object[] {
+            "Мобильность",
+            "Стабильность на краях",
+            "Углы",
+            "Статические веса",
+            "Количество фишек"});
+            this.heuristicsComboBox.Location = new System.Drawing.Point(131, 207);
+            this.heuristicsComboBox.Name = "heuristicsComboBox";
+            this.heuristicsComboBox.Size = new System.Drawing.Size(270, 28);
+            this.heuristicsComboBox.TabIndex = 5;
+            this.heuristicsComboBox.SelectedIndexChanged += new System.EventHandler(this.heuristicsComboBox_SelectedIndexChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(519, 450);
+            this.Controls.Add(this.heuristicsComboBox);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label1);
@@ -112,5 +140,7 @@ namespace ReversiUI
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox heuristicsComboBox;
     }
 }

@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Bot.cs" />
     <Compile Include="GamePosition.cs" />
+    <Compile Include="Heuristics.cs" />
     <Compile Include="Minimax.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

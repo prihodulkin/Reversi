@@ -28,6 +28,8 @@ namespace ReversiUI
 
         public Player User;
 
+        public HeuristicsEnum Heuristics = HeuristicsEnum.Mobility;
+
         public int Level
         {
             get

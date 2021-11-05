@@ -323,7 +323,7 @@ namespace Reversi
             return maxPlayer==Player? possibleSteps.Count:-possibleSteps.Count;
         }
 
-        public int GetPotintialMobility(Player player)
+        public int GetPotentialMobility(Player player)
         {
 
             HashSet<Square> emptySquares = new HashSet<Square>();

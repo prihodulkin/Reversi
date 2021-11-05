@@ -10,7 +10,7 @@ namespace Reversi
     class Node
     {
         public GamePosition Position;
-        public int Score;
+        public double Score=-1;
         public int AbsDepth { get; private set; }
         Dictionary<Square, Node> descendants;
 
@@ -60,21 +60,9 @@ namespace Reversi
         {
             return stepNumber < 20 ? 1 : stepNumber < 40 ? 2 : 3;
         }
-
-        static int Heuristic(GamePosition position, Player maxPlayer, int stepNumber)
-        {
-            var opponent = maxPlayer.Opponent();
-            var mCoeff = GetMobilityCoefficient(stepNumber);
-            var sCoeff = GetStabilityCoefficient(stepNumber);
-            var result = (position.GetDisksCount(maxPlayer) - position.GetDisksCount(opponent))+
-                       2* position.GetMobility(maxPlayer)+
-                       2* (position.GetPotintialMobility(maxPlayer) - position.GetPotintialMobility(opponent)) +
-                       // (position.GetCornersCount(maxPlayer) - position.GetCornersCount(opponent)) +
-                       // (position.GetEdgesSquaresCount(maxPlayer) - position.GetEdgesSquaresCount(opponent)) +
-                       // (position.GetEdgesStability(maxPlayer) - position.GetEdgesSquaresCount(opponent))
-                       +0;
-            return result;
-        }
+        
+        
+    
 
         static int GetTerminalScore(GamePosition position, Player maxPlayer)
         {
@@ -85,22 +73,23 @@ namespace Reversi
             
         }
 
-        public static int MinimaxFun(GamePosition position, Player maxPlayer, int depth, int maxDepth)
+        public static double MinimaxFun(GamePosition position, Player maxPlayer, int depth, int maxDepth, HeuristicsEnum heuristics)
         {
+            var Heuristic = heuristics.Func();
             if (position.IsTerminal())
             {
                 return GetTerminalScore(position, maxPlayer);
             }
             if (depth == maxDepth)
             {
-                return Heuristic(position, maxPlayer, depth);
+                return Heuristic(position, maxPlayer);
             }
             if (position.Player == maxPlayer)
             {
-                int score = int.MinValue;
+                double score = double.MinValue;
                 foreach (var p in position.GetAllPossibleSteps())
                 {
-                    var s = MinimaxFun(p, maxPlayer, depth + 1, maxDepth);
+                    var s = MinimaxFun(p, maxPlayer, depth + 1, maxDepth, heuristics);
                     if (s > score)
                     {
                         score = s;
@@ -110,10 +99,10 @@ namespace Reversi
             }
             else
             {
-                int score = int.MaxValue;
+                double score = double.MaxValue;
                 foreach (var p in position.GetAllPossibleSteps())
                 {
-                    var s = MinimaxFun(p, maxPlayer, depth + 1, maxDepth);
+                    var s = MinimaxFun(p, maxPlayer, depth + 1, maxDepth, heuristics);
                     if (s < score)
                     {
                         score = s;
@@ -124,8 +113,9 @@ namespace Reversi
            
         }
 
-        public static void MinimaxProcedure(Node node, Player maxPlayer, int depth)
+        public static void MinimaxProcedure(Node node, Player maxPlayer, int depth, HeuristicsEnum heuristics)
         {
+            var Heuristic = heuristics.Func();
             var position = node.Position;
             if (position.IsTerminal())
             {
@@ -134,15 +124,15 @@ namespace Reversi
             }
             if (depth == 0)
             {
-                node.Score = Heuristic(position, maxPlayer, node.AbsDepth);
+                node.Score = Heuristic(position, maxPlayer);
                 return;
             }
             if (position.Player == maxPlayer)
             {
-                int score = int.MinValue;
+                double score = double.MinValue;
                 foreach (var n in node.Descendants)
                 {
-                    MinimaxProcedure(n, maxPlayer, depth - 1);
+                    MinimaxProcedure(n, maxPlayer, depth - 1, heuristics);
                     var s = n.Score;
                     if (s > score)
                     {
@@ -153,10 +143,10 @@ namespace Reversi
             }
             else
             {
-                int score = int.MaxValue;
+                double score = double.MaxValue;
                 foreach (var n in node.Descendants)
                 {
-                    MinimaxProcedure(n, maxPlayer, depth - 1);
+                    MinimaxProcedure(n, maxPlayer, depth - 1, heuristics);
                     var s = n.Score;
                     if (s  < score)
                     {
@@ -168,8 +158,9 @@ namespace Reversi
         }
 
 
-        public static void MinimaxProcedureWithAlphaBetaPruning(Node node, Player maxPlayer, int depth, int alpha, int beta)
+        public static void MinimaxProcedureWithAlphaBetaPruning(Node node, Player maxPlayer, int depth, double alpha, double beta, HeuristicsEnum heuristics)
         {
+            var Heuristic = heuristics.Func();
             var position = node.Position;
             if (position.IsTerminal())
             {
@@ -178,20 +169,20 @@ namespace Reversi
             }
             if (depth == 0)
             {
-                node.Score = Heuristic(position, maxPlayer, node.AbsDepth);
+                node.Score = Heuristic(position, maxPlayer);
                 return;
             }
 
             if (position.Player == maxPlayer)
             {
-                alpha = int.MinValue;
-                int score = int.MinValue;
+                alpha = double.MinValue;
+                double score = double.MinValue;
                 foreach (var n in node.Descendants)
                 {
-                    MinimaxProcedureWithAlphaBetaPruning(n, maxPlayer, depth - 1, alpha, beta);
+                    MinimaxProcedureWithAlphaBetaPruning(n, maxPlayer, depth - 1, alpha, beta, heuristics);
                     score = Math.Max(score, n.Score);
-                    alpha = Math.Max(alpha, n.Score);
-                    if (alpha <= beta)
+                    alpha = Math.Max(alpha, score);
+                    if (alpha >= beta)
                     {
                         break;
                     }
@@ -200,14 +191,14 @@ namespace Reversi
             }
             else
             {
-                int score = int.MaxValue;
+                double score = double.MaxValue;
                 foreach (var n in node.Descendants)
                 {
-                    MinimaxProcedureWithAlphaBetaPruning(n, maxPlayer, depth - 1, alpha, beta);
+                    MinimaxProcedureWithAlphaBetaPruning(n, maxPlayer, depth - 1, alpha, beta, heuristics);
                     var s = n.Score;
                     score = Math.Min(score, n.Score);
-                    beta = Math.Min(score, n.Score);
-                    if (alpha <= beta)
+                    beta = Math.Min(score, score);
+                    if (alpha >= beta)
                     {
                         break;
                     }

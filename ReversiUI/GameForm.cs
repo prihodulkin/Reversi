@@ -32,7 +32,7 @@ namespace ReversiUI
             if (mode == GameMode.PlayerVsBot)
             {   
                 var settings = Settings.GetInstance();
-                bot = new Bot(settings.User.Opponent(), settings.Level);
+                bot = new Bot(settings.User.Opponent(), settings.Level, settings.Heuristics);
                 if (bot.Player == Player.Black)
                 {
                     var currentPosition = gamePositions.Peek();

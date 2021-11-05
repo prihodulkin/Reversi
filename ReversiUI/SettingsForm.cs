@@ -39,5 +39,27 @@ namespace ReversiUI
                     break;
             }
         }
+
+        private void heuristicsComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (((ComboBox)sender).SelectedItem)
+            {
+                case "Углы":
+                    settings.Heuristics = Reversi.HeuristicsEnum.CornersCount;
+                    break;
+                case "Мобильность":
+                    settings.Heuristics = Reversi.HeuristicsEnum.Mobility;
+                    break;
+                case "Стабильность на краях":
+                    settings.Heuristics = Reversi.HeuristicsEnum.EdgeStability;
+                    break;
+                case "Статические веса":
+                    settings.Heuristics = Reversi.HeuristicsEnum.StaticWeights;
+                    break;
+                case "Количество фишек":
+                    settings.Heuristics = Reversi.HeuristicsEnum.CoinPartly;
+                    break;
+            }
+        }
     }
 }

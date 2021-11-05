@@ -19,6 +19,8 @@ namespace Reversi
         public Player Player { get; }
         public Player Opponent { get; }
 
+        public HeuristicsEnum Heuristics { get;  }
+
         Node node = new Node();
 
         List<Square> steps;
@@ -31,12 +33,13 @@ namespace Reversi
             }
         }
 
-        public Bot(Player player, int level)
+        public Bot(Player player, int level, HeuristicsEnum heuristics)
         {
             Player = player;
             Opponent = player.Opponent();
             Level = level;
             steps = new List<Square>();
+            Heuristics = heuristics;
         }
 
         void checkStepCorrectness(Player player)
@@ -69,7 +72,7 @@ namespace Reversi
             }
             while (position.Player == Player)
             {
-                Minimax.MinimaxProcedureWithAlphaBetaPruning(node, Player, Level, int.MinValue, int.MaxValue);
+                Minimax.MinimaxProcedureWithAlphaBetaPruning(node, Player, Level, double.MinValue, double.MaxValue, Heuristics);
 
                 var descDict = node.DescendantsDict;
                 var maxP = descDict.First();
