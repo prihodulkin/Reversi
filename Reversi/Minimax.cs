@@ -49,20 +49,20 @@ namespace Reversi
         }
         
     }
+
+    enum MinimaxEnum
+    {
+        Simple,
+        AlphaBeta,
+    }
+
     static class Minimax
     {
-        static int GetMobilityCoefficient(int stepNumber)
-        {
-            return stepNumber < 20 ? 3 : stepNumber < 40 ? 2 : 1;
-        }
-
-        static int GetStabilityCoefficient(int stepNumber)
-        {
-            return stepNumber < 20 ? 1 : stepNumber < 40 ? 2 : 3;
-        }
-        
-        
     
+        
+
+
+
 
         static int GetTerminalScore(GamePosition position, Player maxPlayer)
         {
@@ -73,8 +73,51 @@ namespace Reversi
             
         }
 
-        public static double MinimaxFun(GamePosition position, Player maxPlayer, int depth, int maxDepth, HeuristicsEnum heuristics)
+        public static Square Find(GamePosition[] positions, Player maxPlayer, int depth, int maxDepth, HeuristicsEnum heuristics, MinimaxEnum fun)
         {
+            var position = positions[depth];
+            if (position.Player == maxPlayer)
+            {
+                double score = double.MinValue;
+                Square result = position.PossibleStepsSquares.First();
+                foreach (var square in position.PossibleStepsSquares)
+                {
+                    position.MakeStep(square, positions[depth + 1]);
+                    var s = fun==MinimaxEnum.Simple?
+                        MinimaxFun(positions, maxPlayer, depth + 1, maxDepth, heuristics): 
+                        MinimaxFunWithAlphaBetaPruning(positions, maxPlayer, depth + 1, maxDepth, heuristics, double.MinValue, double.MaxValue);
+                    if (s > score)
+                    {
+                        score = s;
+                        result = square;
+                    }
+                }
+                return result;
+            }
+            else
+            {
+                double score = double.MaxValue;
+                Square result = position.PossibleStepsSquares.First();
+                foreach (var square in position.PossibleStepsSquares)
+                {
+                    position.MakeStep(square, positions[depth + 1]);
+                    var s = fun == MinimaxEnum.Simple ?
+                      MinimaxFun(positions, maxPlayer, depth + 1, maxDepth, heuristics) :
+                      MinimaxFunWithAlphaBetaPruning(positions, maxPlayer, depth + 1, maxDepth, heuristics, double.MinValue, double.MaxValue);
+                    if (s < score)
+                    {
+                        score = s;
+                        result = square;
+                    }
+                }
+                return result;
+            }
+
+        }
+
+        public static double MinimaxFun(GamePosition[] positions, Player maxPlayer, int depth, int maxDepth,  HeuristicsEnum heuristics)
+        {
+            var position = positions[depth];
             var Heuristic = heuristics.Func();
             if (position.IsTerminal())
             {
@@ -87,9 +130,10 @@ namespace Reversi
             if (position.Player == maxPlayer)
             {
                 double score = double.MinValue;
-                foreach (var p in position.GetAllPossibleSteps())
+                foreach (var square in position.PossibleStepsSquares)
                 {
-                    var s = MinimaxFun(p, maxPlayer, depth + 1, maxDepth, heuristics);
+                    position.MakeStep(square, positions[depth + 1]);
+                    var s =  MinimaxFun(positions, maxPlayer, depth + 1, maxDepth,  heuristics);
                     if (s > score)
                     {
                         score = s;
@@ -100,9 +144,10 @@ namespace Reversi
             else
             {
                 double score = double.MaxValue;
-                foreach (var p in position.GetAllPossibleSteps())
+                foreach (var square in position.PossibleStepsSquares)
                 {
-                    var s = MinimaxFun(p, maxPlayer, depth + 1, maxDepth, heuristics);
+                    position.MakeStep(square, positions[depth + 1]);
+                    var s = MinimaxFun(positions, maxPlayer, depth + 1, maxDepth, heuristics);
                     if (s < score)
                     {
                         score = s;
@@ -111,6 +156,55 @@ namespace Reversi
                 return score;
             }
            
+        }
+
+        public static double MinimaxFunWithAlphaBetaPruning(GamePosition[] positions, Player maxPlayer, int depth, int maxDepth, HeuristicsEnum heuristics, double alpha, double beta)
+        {
+            var position = positions[depth];
+            var Heuristic = heuristics.Func();
+            if (position.IsTerminal())
+            {
+                return GetTerminalScore(position, maxPlayer);
+            }
+            if (depth == maxDepth)
+            {
+                return Heuristic(position, maxPlayer);
+            }
+            if (position.Player == maxPlayer)
+            {
+                double score = double.MinValue;
+                alpha = double.MinValue;
+                foreach (var square in position.PossibleStepsSquares)
+                {
+                    position.MakeStep(square, positions[depth + 1]);
+                    var s = MinimaxFunWithAlphaBetaPruning(positions, maxPlayer, depth + 1, maxDepth, heuristics, alpha, beta);
+                    score = Math.Max(score, s);
+                    alpha = Math.Max(alpha, score);
+                    if (alpha >= beta)
+                    {
+                        break;
+                    }
+                }
+                return score;
+            }
+            else
+            {
+                double score = double.MaxValue;
+                beta = double.MaxValue;
+                foreach (var square in position.PossibleStepsSquares)
+                {
+                    position.MakeStep(square, positions[depth + 1]);
+                    var s = MinimaxFunWithAlphaBetaPruning(positions, maxPlayer, depth + 1, maxDepth, heuristics, alpha, beta);
+                    score = Math.Min(score, s);
+                    beta = Math.Min(score, beta);
+                    if (alpha >= beta)
+                    {
+                        break;
+                    }
+                }
+                return score;
+            }
+
         }
 
         public static void MinimaxProcedure(Node node, Player maxPlayer, int depth, HeuristicsEnum heuristics)

@@ -23,12 +23,12 @@ namespace ReversiUI
 
         Settings()
         {
-           level = 4;
+           level = 5;
         }
 
         public Player User;
 
-        public HeuristicsEnum Heuristics = HeuristicsEnum.Mobility;
+        public HeuristicsEnum Heuristics = HeuristicsEnum.MobilityAndStability;
 
         public int Level
         {

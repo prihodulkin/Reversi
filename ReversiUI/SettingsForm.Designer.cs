@@ -105,11 +105,12 @@ namespace ReversiUI
             this.heuristicsComboBox.FormattingEnabled = true;
             this.heuristicsComboBox.Items.AddRange(new object[] {
             "Мобильность",
-            "Стабильность на краях",
+            "Стабильность",
             "Углы",
             "Статические веса",
-            "Количество фишек"});
-            this.heuristicsComboBox.Location = new System.Drawing.Point(131, 207);
+            "Количество фишек",
+            "Мобильность и стабильность"});
+            this.heuristicsComboBox.Location = new System.Drawing.Point(125, 208);
             this.heuristicsComboBox.Name = "heuristicsComboBox";
             this.heuristicsComboBox.Size = new System.Drawing.Size(270, 28);
             this.heuristicsComboBox.TabIndex = 5;

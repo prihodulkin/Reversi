@@ -11,8 +11,9 @@ namespace Reversi
         CoinPartly,
         CornersCount,
         Mobility,
-        EdgeStability,
-        StaticWeights
+        Stability,
+        StaticWeights,
+        MobilityAndStability,
     }
 
     public static class HeuristicsExtension
@@ -25,12 +26,14 @@ namespace Reversi
                     return Heuristics.CoinParity;
                 case HeuristicsEnum.CornersCount:
                     return Heuristics.CornersCount;
-                case HeuristicsEnum.EdgeStability:
-                    return Heuristics.EdgesStability;
+                case HeuristicsEnum.Stability:
+                    return Heuristics.Stability;
                 case HeuristicsEnum.StaticWeights:
                     return Heuristics.StaticWeights;
                 case HeuristicsEnum.Mobility:
                     return Heuristics.Mobility;
+                case HeuristicsEnum.MobilityAndStability:
+                    return Heuristics.MobilityAndStability;
                 default:
                     throw new ArgumentException();
             }
@@ -80,11 +83,11 @@ namespace Reversi
                 100 * (maxPlayerValue - minPlayerValue) * 1.0 / (minPlayerValue + maxPlayerValue);
         }
 
-        public static double EdgesStability(GamePosition position, Player maxPlayer)
+        public static double Stability(GamePosition position, Player maxPlayer)
         {
             var minPlayer = maxPlayer.Opponent();
-            var maxPlayerValue = position.GetEdgesStability(maxPlayer);
-            var minPlayerValue = position.GetEdgesStability(minPlayer);
+            var maxPlayerValue = position.GetStability(maxPlayer);
+            var minPlayerValue = position.GetStability(minPlayer);
             return minPlayerValue + maxPlayerValue == 0 ? 0 :
                 100 * (maxPlayerValue - minPlayerValue) * 1.0 / (minPlayerValue + maxPlayerValue);
         }
@@ -104,6 +107,100 @@ namespace Reversi
             {
                 maxPlayerValue += Weights[s.X, s.Y];
             }
+            return minPlayerValue + maxPlayerValue == 0 ? 0 :
+                100 * (maxPlayerValue - minPlayerValue) * 1.0 / (minPlayerValue + maxPlayerValue);
+        }
+
+        public static double GetMobilityCoefficient(int depth)
+        {
+            //if (depth < 5)
+            //{
+            //    return 5;
+            //}
+            //else if (depth < 10)
+            //{
+            //    return 4;
+            //}
+            //else if (depth < 15)
+            //{
+            //    return 3;
+            //}
+            //else if (depth < 20)
+            //{
+            //    return 2;
+            //}
+            //return 1;
+            if (depth < 20)
+            {
+                return 3;
+            }
+            else if (depth < 40)
+            {
+                return 2;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+
+        public static double GetStabilityCoefficient(int depth)
+        {
+            //if (depth < 5)
+            //{
+            //    return 1;
+            //}
+            //else if (depth < 10)
+            //{
+            //    return 2;
+            //}
+            //else if (depth < 15)
+            //{
+            //    return 3;
+            //}
+            //else if (depth < 20)
+            //{
+            //    return 4;
+            //}
+            //return 5;
+            if (depth < 20)
+            {
+                return 1;
+            }
+            else if (depth < 40)
+            {
+                return 2;
+            }
+            else
+            {
+                return 3;
+            }
+        }
+
+        public static double MobilityAndStability(GamePosition position, Player maxPlayer)
+        {
+            //var isBlack = maxPlayer == Player.Black;
+            //var maxSquares = isBlack ? position.BlackPieces : position.WhitePieces;
+            //var minSquares = isBlack ? position.WhitePieces : position.BlackPieces;
+            //var maxPlayerWeight = 0;
+            //var minPlayerWeight= 0;
+            //foreach (var s in minSquares)
+            //{
+            //    minPlayerWeight += Weights[s.X, s.Y];
+            //}
+            //foreach (var s in maxSquares)
+            //{
+            //    minPlayerWeight += Weights[s.X, s.Y];
+            //}
+            var minPlayer = maxPlayer.Opponent();
+            var maxPlayerValue =
+                ( maxPlayer ==Player.Black? position.WhiteCount : position.BlackCount +
+                GetStabilityCoefficient(position.Depth) * position.GetStability(maxPlayer) +
+                GetMobilityCoefficient(position.Depth) * position.GetMobility(maxPlayer));
+            var minPlayerValue =
+                 (minPlayer == Player.Black ? position.WhiteCount : position.BlackCount +
+                 GetStabilityCoefficient(position.Depth) * position.GetStability(minPlayer) +
+                 GetMobilityCoefficient(position.Depth) * position.GetMobility(minPlayer));
             return minPlayerValue + maxPlayerValue == 0 ? 0 :
                 100 * (maxPlayerValue - minPlayerValue) * 1.0 / (minPlayerValue + maxPlayerValue);
         }

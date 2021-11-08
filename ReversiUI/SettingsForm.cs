@@ -50,14 +50,17 @@ namespace ReversiUI
                 case "Мобильность":
                     settings.Heuristics = Reversi.HeuristicsEnum.Mobility;
                     break;
-                case "Стабильность на краях":
-                    settings.Heuristics = Reversi.HeuristicsEnum.EdgeStability;
+                case "Стабильность":
+                    settings.Heuristics = Reversi.HeuristicsEnum.Stability;
                     break;
                 case "Статические веса":
                     settings.Heuristics = Reversi.HeuristicsEnum.StaticWeights;
                     break;
                 case "Количество фишек":
                     settings.Heuristics = Reversi.HeuristicsEnum.CoinPartly;
+                    break;
+                case "Мобильность и стабильность":
+                    settings.Heuristics = Reversi.HeuristicsEnum.MobilityAndStability;
                     break;
             }
         }
