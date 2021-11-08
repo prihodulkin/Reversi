@@ -194,11 +194,11 @@ namespace Reversi
             //}
             var minPlayer = maxPlayer.Opponent();
             var maxPlayerValue =
-                ( maxPlayer ==Player.Black? position.WhiteCount : position.BlackCount +
+                (position.GetCornersCount(maxPlayer)*10 +
                 GetStabilityCoefficient(position.Depth) * position.GetStability(maxPlayer) +
                 GetMobilityCoefficient(position.Depth) * position.GetMobility(maxPlayer));
             var minPlayerValue =
-                 (minPlayer == Player.Black ? position.WhiteCount : position.BlackCount +
+                 (position.GetCornersCount(minPlayer) * 10 +
                  GetStabilityCoefficient(position.Depth) * position.GetStability(minPlayer) +
                  GetMobilityCoefficient(position.Depth) * position.GetMobility(minPlayer));
             return minPlayerValue + maxPlayerValue == 0 ? 0 :

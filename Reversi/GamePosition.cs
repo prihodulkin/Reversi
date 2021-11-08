@@ -31,6 +31,11 @@ namespace Reversi
            new Shift(-1, 1) 
         };
 
+        public override string ToString()
+        {
+            return Char.ToString((char)('a' + x)) + Char.ToString((char)('0' + y + 1));
+        }
+
         int x;
         int y;
 
@@ -38,6 +43,20 @@ namespace Reversi
         {
             this.x = x;
             this.y = y;
+        }
+
+        public Square(string s)
+        {
+            if (s.Length != 2)
+            {
+                throw new ArgumentException("Некорректная строка!");
+            }
+            x = s[0] - 'a';
+            if (x < 0 || x > 7)
+            {
+                throw new ArgumentException("Неправильная буква при указании позиции");
+            }
+            y = s[1] - '1';
         }
 
         public override bool Equals(Object obj)
@@ -302,6 +321,11 @@ namespace Reversi
         public bool IsTerminal()
         {
             return BlackPieces.Count + WhitePieces.Count == 64||PossibleSteps.Count==0;
+        }
+
+        public int GetCount(Player player)
+        {
+            return player == Player.Black ? BlackCount : WhiteCount;
         }
 
         public GamePosition MakeStep(Square square)
